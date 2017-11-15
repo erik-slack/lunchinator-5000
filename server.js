@@ -1,0 +1,98 @@
+var express = require('express');
+var app = express();
+
+var bodyParser = require('body-parser');
+/*
+var cookieParser = require('cookie-parser');
+var fs = require('fs');
+var morgan = require('morgan');
+*/
+var genuuid = require('uid2');
+var expressSession = require('express-session');
+var path = require('path');
+var nconf = require('nconf');
+var debug = require('debug');
+
+var routes = require('./routes/routes');
+var toggleRoutes = require('./routes/toggle_routes');
+
+main();
+
+function main() {
+    var validOptions = ['--production', '-p'];
+    var optionsInArgs = {};
+
+    // check command line arguments for supported options
+    process.argv.forEach(function (val, index, array) {
+        // print args list
+        //console.log(index + ': ' + val);
+
+        if (index <= 1) {
+            return; // same as continue in forEach
+        }
+
+        if (validOptions.indexOf(val) > -1) {
+            optionsInArgs[val.replace(/-/g, '')] = true;
+        }
+    });
+
+    if (optionsInArgs.production || optionsInArgs.p) {
+        console.log('Active Build Mode: PRODUCTION');
+        app.use(express.static(path.join(__dirname + '/dist/public')));
+    } else {
+        console.log('Active Build Mode: DEVELOPMENT');
+        app.use(express.static(path.join(__dirname + '/public')));
+    }
+    app.use('/bower_components', express.static(path.join(__dirname + '/bower_components')));
+    app.use('/node_modules', express.static(path.join(__dirname + '/node_modules')));
+    if (optionsInArgs.production) {
+        app.set('views', __dirname + '/dist/public/views');
+    } else {
+        app.set('views', __dirname + '/public');
+    }
+    app.engine('html', require('ejs').renderFile);
+    app.set('view engine', 'ejs');
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({
+        extended: false
+    }));
+
+    app.use(expressSession({
+        genid: function (req) {
+            return genuuid(62); // use UUIDs for session IDs
+        },
+        secret: 'secretkey',
+        resave: false,
+        saveUninitialized: true
+    }));
+
+    app.use('/', routes());
+    app.use('/', toggleRoutes());
+
+    //This is 404 for API requests - UI/View 404s should be
+    //handled in Angular
+    app.use(function (req, res, next) {
+        var err = new Error('Not Found');
+        err.status = 404;
+        next(err);
+    });
+
+    //setup config file
+    nconf.argv()
+        .env()
+        .file({
+            file: './config.json'
+        });
+
+    var port = nconf.get('System:port');
+    app.set('port', port);
+
+    var server = app.listen(app.get('port'), function (req, res) {
+        if (res) {
+            res.writeHead(200, {
+                'Content-Type': 'text/html'
+            });
+        }
+        console.log('Express server listening on port ' + server.address().port);
+    });
+}

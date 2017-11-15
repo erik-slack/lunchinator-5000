@@ -1,0 +1,27 @@
+{
+    "name": "lunchinator-5000",
+    "version": "0.1.0",
+    "description": "",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "erik.slack@stgconsulting.com",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "*",
+        "compression": "*",
+        "cookie-parser": "*",
+        "express": "*",
+        "express-session": "*",
+        "morgan": "*",
+        "multer": "*",
+        "nconf": "*",
+        "path": "*",
+        "q": "*",
+        "uid2": "*"
+    },
+    "devDependencies": {
+
+    }
+}
