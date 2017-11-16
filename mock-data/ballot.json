@@ -1,0 +1,13 @@
+{
+    "endTime": "3/20/17 11:45",
+    "voters": [
+        {
+           "name":"Bob",
+           "emailAddress": "bob@gmail.com"
+        }, {
+           "name":"Jim",
+           "emailAddress": "jim@gmail.com"
+        }
+    ]
+
+}

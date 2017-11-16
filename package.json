@@ -19,6 +19,7 @@
         "nconf": "*",
         "path": "*",
         "q": "*",
+        "uuid": "*",
         "uid2": "*"
     },
     "devDependencies": {

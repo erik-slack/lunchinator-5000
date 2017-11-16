@@ -9,6 +9,7 @@ var https = require('https');
 var constants = require('./route_constants');
 
 var BASE_URL = constants.BASE_URL;
+var BASE_PATH = constants.BASE_PATH;
 
 module.exports = {
     simplifiedHttpsGet: simplifiedHttpsGet,
@@ -41,15 +42,15 @@ function defaultOnNon200Code(res) {
 function simplifiedHttpsGet(thisPath, onEndFunction, onErrFunction, onNon200Code) {
 
     console.log('\nOutgoing URL');
-    console.log('https://' + BASE_URL + thisPath);
+    console.log('https://' + BASE_URL + BASE_PATH + thisPath);
     var d = new Date();
     console.log('Timestamp: ' + d);
 
     var options = {
         rejectUnauthorized: false,
         hostname: BASE_URL,
-        port: 443,
-        path: thisPath,
+        //port: 443,
+        path: BASE_PATH + thisPath,
         method: 'GET'
     };
 
@@ -64,11 +65,11 @@ function simplifiedHttpsGet(thisPath, onEndFunction, onErrFunction, onNon200Code
                 responseBody += d;
         });
         responseFromService.on('end', function () {
-            console.log('Response Data:');
+            //console.log('Response Data:');
             if (responseBody === ''){
-                console.log('No data');
+                //console.log('No data');
             } else {
-                console.log(responseBody);
+                //console.log(responseBody);
             }
             onEndFunction(responseBody, responseFromService);
         });
