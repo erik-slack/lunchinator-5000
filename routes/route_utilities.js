@@ -131,10 +131,8 @@ function simplifiedHttpsPost(thisPath, onEndFunction, onErrFunction, onNon200Cod
 };
 
 function simplifiedHttpsDelete(thisPath, onEndFunction, onErrFunction) {
-
     console.log('\nOutgoing URL');
     console.log('https://' + BASE_URL + thisPath);
-
 
     var options = {
         rejectUnauthorized: false,

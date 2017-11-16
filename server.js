@@ -61,8 +61,8 @@ function main() {
     }));
 
     app.use('/', routes());
-    app.use('/ballot', ballotRoutes());
-    app.use('/vote', voteRoutes());
+    app.use('/api', ballotRoutes());
+    app.use('/api', voteRoutes());
 
     //This is 404 for API requests
     app.use(function (req, res, next) {
