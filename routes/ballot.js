@@ -76,9 +76,10 @@ function createBallot(req, res) {
         }
 
         for (var i = 0; i < reviewsCount; i++) {
-            if (relevantReviews[i].restaurant === newBallot.choices[highestRatedChoiceIndex].name) {
+            var thisReview = relevantReviews[i];
+            if (thisReview.restaurant === newBallot.choices[highestRatedChoiceIndex].name) {
                 if (highestRatingReviewIndex === -1 || 
-                    (parseInt(relevantReviews[i].rating) > parseInt(relevantReviews[highestRatingReviewIndex].rating))) {
+                    (parseInt(thisReview.rating) > parseInt(relevantReviews[highestRatingReviewIndex].rating))) {
                     highestRatingReviewIndex = i;
                 }
             }
