@@ -19,6 +19,7 @@ module.exports = function () {
     router.post('/vote', function (req, res) {
         var newVote = new Vote(req.body);
         var relevantBallot = getRelevantBallot();
+        var newVoteMessage = '';
 
         if (relevantBallot === null) {
             res.status(400);
@@ -37,11 +38,10 @@ module.exports = function () {
             res.send("Invalid restaurant choice.  This vote will not be counted.");
             return;
         } else {
-            relevantBallot.castVote(newVote);
-            tallyVotes();
+            newVoteMessage = relevantBallot.castVote(newVote);
         }
 
-        res.send(newVote);
+        res.send(newVoteMessage);
 
         function getRelevantBallot() {
             var ballotCount = ballots.length;

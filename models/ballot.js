@@ -87,8 +87,10 @@ function Ballot(ballotData) {
         if (voterAlreadyVotedIndex !== -1) {
             this.votes.splice(newVote);
             voteHandledMessage = 'Previous vote overwritten by new vote.';
+            this.tallyVotes();
         } else {
             this.votes.push(newVote);
+            this.tallyVotes();
         }
         return voteHandledMessage;
     };
@@ -104,7 +106,7 @@ function Ballot(ballotData) {
             var relevantChoice = this.choices[choicesMap[thisVote.restaurantId]];
             relevantChoice.votes++;
         }
-        determineWinner();
+        this.determineWinner();
     };
     this.determineWinner = function () {
         var winningChoiceIndex = 0;
