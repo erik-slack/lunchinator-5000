@@ -87,7 +87,7 @@ function Ballot(ballotData) {
         if (voterAlreadyVotedIndex !== -1) {
             this.votes.splice(newVote);
             voteHandledMessage = 'Previous vote overwritten by new vote.';
-        } else (voteCounted) {
+        } else {
             this.votes.push(newVote);
         }
         return voteHandledMessage;
