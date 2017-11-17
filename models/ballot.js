@@ -85,7 +85,7 @@ function Ballot(ballotData) {
         var voteHandledMessage = 'Your vote has been counted.';
         var voterAlreadyVotedIndex = this.findVote(newVote); // -1 if no dupe vote found
         if (voterAlreadyVotedIndex !== -1) {
-            this.votes.splice(newVote);
+            this.votes.splice(voterAlreadyVotedIndex, 1, newVote);
             voteHandledMessage = 'Previous vote overwritten by new vote.';
             this.tallyVotes();
         } else {
