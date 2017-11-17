@@ -42,6 +42,8 @@ function createBallot(req, res) {
         var responseCount = 0;
         var reviewsMerged = [];
         for (var i = 0; i < NUM_OF_CHOICES; i++) {
+            var thisChoice = newBallot.choices[i];
+            addVotesProperty(thisChoice);
             getReview(newBallot.choices[i].name, i)
                 .then(function(result) {
                     newBallot.choices[result.iterator].averageReview = calculateAverageRating(newBallot.choices[result.iterator], result.data);
@@ -52,6 +54,10 @@ function createBallot(req, res) {
                     }
                 });
         }
+    }
+
+    function addVotesProperty(choice) {
+        choice.votes = 0;
     }
 
     function calculateAverageRating(choiceToUpdate, reviews) {

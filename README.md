@@ -4,6 +4,8 @@
 
 This is a simple coding challenge given to me as part of an interview regarding Node.js.
 
+Summary: write an API that allows clients to vote on where they're going to go eat lunch today.
+
 ## Challenge Specs
 
 * [https://interview-project-17987.herokuapp.com/backend-software-engineer-test](https://interview-project-17987.herokuapp.com/backend-software-engineer-test)

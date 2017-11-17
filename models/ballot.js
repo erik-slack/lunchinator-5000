@@ -93,6 +93,30 @@ function Ballot(ballotData) {
         return voteHandledMessage;
     };
     this.tallyVotes = function () {
-
+        var choicesMap = {};
+        for (var i = 0; i < NUM_OF_CHOICES; i++) {
+            var thisChoice = this.choices[i];
+            choicesMap[thisChoice.id] = i;
+        }
+        var votesCount = this.votes.length;
+        for (var i = 0; i < votesCount; i++) {
+            var thisVote = this.votes[i];
+            var relevantChoice = this.choices[choicesMap[thisVote.restaurantId]];
+            relevantChoice.votes++;
+        }
+        determineWinner();
+    };
+    this.determineWinner = function () {
+        var winningChoiceIndex = 0;
+        var leadingVotesNumber = 0;
+        for (var i = 0; i < NUM_OF_CHOICES; i++) {
+            var thisChoice = this.choices[i];
+            if (thisChoice.votes > leadingVotesNumber) {
+                leadingVotesNumber = thisChoice.votes;
+                winningChoiceIndex = i;
+            }
+        }
+        this.winner = this.choices[winningChoiceIndex];
+        this.winner.datetime = this.endTime;
     };
 }

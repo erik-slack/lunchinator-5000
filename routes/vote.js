@@ -10,15 +10,11 @@ var ballots = require('../session-data').ballots;
 
 module.exports = function () {
     // [NOTE TO CHALLENGE AUTHOR] 
-    // I see what you did there with the api/vote instructions.
-    // It seems to me that the instructions regarding the vote endpoint, at least, direct me to break several industry standards.
-    // I am moving forward under the following assumption (since this is a hypothetical project): 
-    // I spoke with my team lead about my concerns 
-    // and there were no good reasons for the things I was disputing
-    // and he or she consented to some changes to their initial plan.
-    // Namely, those changes are posts should not use queryParams instead of the body
-    // and all queries should return something, be they successful or not.
-    // Also it might be better to store this with a key as a guid to protect sensitive information.
+    // I made changes that are contrary to the requirements.
+    // These changes assume that the product owner has passed off on these changes for this hypothetical project.
+    // The changes include:
+    // 1) posts should not use queryParams instead of the body
+    // 2) all queries should return something, be they successful or not.
 
     router.post('/vote', function (req, res) {
         var newVote = new Vote(req.body);
