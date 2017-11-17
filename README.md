@@ -27,6 +27,13 @@ Summary: write an API that allows clients to vote on where they're going to go e
 
 * npm - the `package.json` file lists all of the npm dependencies
 
+## Endpoints
+
+* /api/create-ballot
+* /api/ballot/:ballotId
+* /api/ballots
+* /api/vote
+
 ## Original Author of Solution
 
 [Erik Slack](https://github.com/erik-slack/)
