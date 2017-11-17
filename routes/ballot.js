@@ -11,6 +11,7 @@ var Ballot = require('../models/ballot').Ballot;
 module.exports = function () {
     router.post('/create-ballot', createBallot);
     router.get('/ballot/:ballotId', getBallotById); 
+    router.get('/ballot', getBallotById); 
     router.get('/ballots', getAllBallots); 
 
     return router;
@@ -64,6 +65,8 @@ function createBallot(req, res) {
     function addSuggestion(relevantReviews) {
         var highestRatedChoiceIndex = 0;
         var highestRatingReviewIndex = -1;
+        var reviewsCount = relevantReviews.length;
+
         for (var i = 1; i < NUM_OF_CHOICES; i++) {
             var thisChoice = newBallot.choices[i];
             var previousChoice = newBallot.choices[i - 1];
@@ -71,10 +74,11 @@ function createBallot(req, res) {
                 highestRatedChoiceIndex = i;
             }
         }
-        var reviewsCount = relevantReviews.length;
+
         for (var i = 0; i < reviewsCount; i++) {
             if (relevantReviews[i].restaurant === newBallot.choices[highestRatedChoiceIndex].name) {
-                if (highestRatingReviewIndex === -1 || (parseInt(relevantReviews[i].rating) > parseInt(relevantReviews[highestRatingReviewIndex].rating))) {
+                if (highestRatingReviewIndex === -1 || 
+                    (parseInt(relevantReviews[i].rating) > parseInt(relevantReviews[highestRatingReviewIndex].rating))) {
                     highestRatingReviewIndex = i;
                 }
             }
@@ -94,14 +98,34 @@ function createBallot(req, res) {
 }
 
 function getBallotById(req, res) {
-    // todo: if no ballotId param throw error
-    var relevantBallot = null;
-    if (relevantBallot.hasExpired()) {
-        relevantBallot = newBallot.getContestedBallot();
-    } else {
-        relevantBallot = newBallot.getWonBallot();
+    var ballotId = req.params.ballotId;
+    if (!ballotId) {
+        res.status(400);
+        res.send('ID of ballot must be included in request url.');
     }
-    res.send();
+
+    var resultBallot = null;
+    var ballotsCount = ballots.length;
+    var ballotFound = false;
+
+    for (var i = 0; i < ballotsCount; i++) {
+        if (ballotId === ballots[i].ballotId) {
+            ballotFound = true;
+            resultBallot = ballots[i];
+        }
+    }
+
+    if (!ballotFound) {
+        res.status(400);
+        res.send('No ballot found with ID: \"' + ballotId + '\"');
+    }
+
+    if (!resultBallot.hasExpired()) {
+        resultBallot = resultBallot.getContestedBallot();
+    } else {
+        resultBallot = resultBallot.getWonBallot();
+    }
+    res.send(resultBallot);
 }
 
 function getAllBallots(req, res) {

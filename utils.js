@@ -1,7 +1,8 @@
 var _ = require('lodash');
 
 module.exports = {
-    pickRandomChoices: pickRandomChoices
+    pickRandomChoices: pickRandomChoices,
+    shuffle: shuffle
 }
 
 function pickRandomChoices(targetArray, allChoices, numOfChoices) {
