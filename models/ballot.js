@@ -58,9 +58,13 @@ function Ballot(ballotData) {
         return result;
     };
     this.voteMatchesChoices = function (vote) {
+        // This must be a number not a string
         var result = false;
+        console.log('NUM_OF_CHOICES', NUM_OF_CHOICES);
         for (var i = 0; i < NUM_OF_CHOICES; i++) {
             var thisChoice = this.choices[i];
+            console.log('thisChoice.id', thisChoice.id);
+            console.log('vote.restaurantId', vote.restaurantId);
             if (vote.restaurantId === thisChoice.id) {
                 result = true;
             }
