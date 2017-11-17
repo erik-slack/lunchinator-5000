@@ -3,6 +3,9 @@ var _ = require('lodash');
 var utils = require('../utils');
 var moment = require('moment');
 
+// GLOBALS
+var NUM_OF_CHOICES = require('../constants').NUM_OF_CHOICES;
+
 module.exports = {
     Ballot: Ballot
 }
@@ -35,8 +38,47 @@ function Ballot(ballotData) {
         }
         return this.expired;
     };
+    this.validateVote = function (vote) {
+        var voteIsValid = true;
+        if (this.hasExpired(vote) || !this.voteMatchesVoters(vote) || !this.voteMatchesChoices(vote)) {
+            voteIsValid = false;
+        }
+        return voteIsValid;
+    };
+    this.voteMatchesVoters = function (vote) {
+        // This is case sensitive
+        var result = false;
+        var voterCount = this.voters.length;
+        for (var i = 0; i < voterCount; i++) {
+            var thisVoter = this.voters[i];
+            if (vote.voterName === thisVoter.name && vote.emailAddress === thisVoter.emailAddress) {
+                result = true;
+            }
+        }
+        return result;
+    };
+    this.voteMatchesChoices = function (vote) {
+        var result = false;
+        for (var i = 0; i < NUM_OF_CHOICES; i++) {
+            var thisChoice = this.choices[i];
+            if (vote.restaurantId === thisChoice.id) {
+                result = true;
+            }
+        }
+        return result;
+    };
     this.castVote = function (newVote) {
-        this.votes.push(newVote)
+        var voteCounted = true;
+        if (this.validateVote(newVote)) {
+            voteCounted = false;
+        }
+        if (voteCounted) {
+            this.votes.push(newVote);
+        }
+        return voteCounted;
+    };
+    this.tallyVotes = function () {
+
     };
 }
 

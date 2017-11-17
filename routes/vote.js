@@ -21,16 +21,28 @@ module.exports = function () {
     // Also it might be better to store this with a key as a guid to protect sensitive information.
 
     router.post('/vote', function (req, res) {
-        // todo: add validation for request body
         var newVote = new Vote(req.body);
         var relevantBallot = getRelevantBallot();
 
-        if (relevantBallot.hasExpired()) {
+        if (relevantBallot === null) {
+            res.status(400);
+            res.send("Ballot doesn't exist with id: " + newVote.ballotId);
+            return;
+        } else if (relevantBallot.hasExpired()) {
             res.status(409);
-            res.send("Apologies!  Ballot's voting period has ended.  This vote will not be counted.");
+            res.send("Ballot's voting period has ended.  This vote will not be counted.");
+            return;
+        } else if (!relevantBallot.voteMatchesVoters(newVote)) {
+            res.status(400);
+            res.send("Invalid voter name/email combination supplied.  This vote will not be counted.");
+            return;
+        } else if (!relevantBallot.voteMatchesChoices(newVote)) {
+            res.status(400);
+            res.send("Invalid restaurant choice.  This vote will not be counted.");
+            return;
         } else {
-            relevantBallot.votes.push(newVote);
-            // todo: add functionality for tallying votes
+            relevantBallot.castVote(newVote);
+            tallyVotes();
         }
 
         res.send(newVote);
@@ -46,6 +58,10 @@ module.exports = function () {
                 }
             }
             return result;
+        }
+
+        function tallyVotes() {
+            
         }
     });
 
