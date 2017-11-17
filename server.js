@@ -1,12 +1,10 @@
+// [NOTE TO CHALLENGE AUTHOR] 
+// I didn't have time for persistence in this exercise.  Also I ran out of time before doing and remaining todo comments.
+
 var express = require('express');
 var app = express();
 
 var bodyParser = require('body-parser');
-/*
-var cookieParser = require('cookie-parser');
-var fs = require('fs');
-var morgan = require('morgan');
-*/
 var genuuid = require('uid2');
 var expressSession = require('express-session');
 var path = require('path');

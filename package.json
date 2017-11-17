@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "erik.slack@stgconsulting.com",
+  "author": "erikslack",
   "license": "ISC",
   "dependencies": {
     "body-parser": "*",

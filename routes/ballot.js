@@ -6,7 +6,12 @@ var https = require('https');
 var q = require('q');
 var _ = require('lodash');
 
+// MODELS
 var Ballot = require('../models/ballot').Ballot;
+
+// GLOBALS
+var ballots = require('../session-data').ballots;
+var NUM_OF_CHOICES = require('../constants').NUM_OF_CHOICES;
 
 module.exports = function () {
     router.post('/create-ballot', createBallot);
@@ -17,14 +22,10 @@ module.exports = function () {
     return router;
 }
 
-/*// Session Data //*/
-
-var NUM_OF_CHOICES = 5;
-var ballots = [];
-
 /*// WSMs //*/
 
 function createBallot(req, res) {
+    // todo: add validation for request body
     var newBallot = new Ballot(req.body);
 
     addChoices(newBallot, addSuggestion);
@@ -103,6 +104,7 @@ function getBallotById(req, res) {
     if (!ballotId) {
         res.status(400);
         res.send('ID of ballot must be included in request url.');
+        return;
     }
 
     var resultBallot = null;
@@ -119,6 +121,7 @@ function getBallotById(req, res) {
     if (!ballotFound) {
         res.status(400);
         res.send('No ballot found with ID: \"' + ballotId + '\"');
+        return;
     }
 
     if (!resultBallot.hasExpired()) {
@@ -139,7 +142,7 @@ function getAllBallots(req, res) {
 
 function getRestaurants() {
     var deferred = q.defer();
-    routeUtils.simplifiedHttpsGet('restaurants', onEndFunction, routeUtils.defaultOnErrFunction, routeUtils.defaultOnNon200Code);
+    routeUtils.httpsGet('restaurants', onEndFunction, routeUtils.defaultOnErrFunction, routeUtils.defaultOnNon200Code);
     function onEndFunction (data) {
         deferred.resolve(JSON.parse(data));
     }
@@ -148,7 +151,7 @@ function getRestaurants() {
 
 function getRestaurant(name) {
     var deferred = q.defer();
-    routeUtils.simplifiedHttpsGet('restaurants/' + encodeURIComponent(name), onEndFunction, routeUtils.defaultOnErrFunction, routeUtils.defaultOnNon200Code);
+    routeUtils.httpsGet('restaurants/' + encodeURIComponent(name), onEndFunction, routeUtils.defaultOnErrFunction, routeUtils.defaultOnNon200Code);
     function onEndFunction (data) {
         deferred.resolve(data);
     }
@@ -157,7 +160,7 @@ function getRestaurant(name) {
 
 function getReviews(name) {
     var deferred = q.defer();
-    routeUtils.simplifiedHttpsGet('reviews', onEndFunction, routeUtils.defaultOnErrFunction, routeUtils.defaultOnNon200Code);
+    routeUtils.httpsGet('reviews', onEndFunction, routeUtils.defaultOnErrFunction, routeUtils.defaultOnNon200Code);
     function onEndFunction (data) {
         deferred.resolve(JSON.parse(data));
     }
@@ -166,7 +169,7 @@ function getReviews(name) {
 
 function getReview(name, iterator) {
     var deferred = q.defer();
-    routeUtils.simplifiedHttpsGet('reviews/' + encodeURIComponent(name), onEndFunction, routeUtils.defaultOnErrFunction, routeUtils.defaultOnNon200Code);
+    routeUtils.httpsGet('reviews/' + encodeURIComponent(name), onEndFunction, routeUtils.defaultOnErrFunction, routeUtils.defaultOnNon200Code);
     function onEndFunction (data) {
         deferred.resolve({
             data: JSON.parse(data),

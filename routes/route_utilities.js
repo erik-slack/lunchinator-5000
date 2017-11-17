@@ -12,12 +12,8 @@ var BASE_URL = constants.BASE_URL;
 var BASE_PATH = constants.BASE_PATH;
 
 module.exports = {
-    simplifiedHttpsGet: simplifiedHttpsGet,
-    simplifiedHttpsPost: simplifiedHttpsPost,
-    simplifiedHttpsDelete: simplifiedHttpsDelete,
-    simplifiedHttpsGetWithBaseUrl: simplifiedHttpsGetWithBaseUrl,
-    simplifiedHttpsPostWithBaseUrl: simplifiedHttpsPostWithBaseUrl,
-    simplifiedHttpsPutWithBaseUrl: simplifiedHttpsPutWithBaseUrl,
+    httpsGet: httpsGet,
+    httpsPost: httpsPost,
     defaultOnErrFunction: defaultOnErrFunction,
     defaultOnNon200Code: defaultOnNon200Code
 };
@@ -39,12 +35,11 @@ function defaultOnNon200Code(res) {
     }
 };
 
-function simplifiedHttpsGet(thisPath, onEndFunction, onErrFunction, onNon200Code) {
-
-    console.log('\nOutgoing URL');
-    console.log('https://' + BASE_URL + BASE_PATH + thisPath);
+function httpsGet(thisPath, onEndFunction, onErrFunction, onNon200Code) {
+    //console.log('\nOutgoing URL');
+    //console.log('https://' + BASE_URL + BASE_PATH + thisPath);
     var d = new Date();
-    console.log('Timestamp: ' + d);
+    //console.log('Timestamp: ' + d);
 
     var options = {
         rejectUnauthorized: false,
@@ -57,7 +52,7 @@ function simplifiedHttpsGet(thisPath, onEndFunction, onErrFunction, onNon200Code
     var responseBody = '';
 
     var requestToService = https.request(options, function (responseFromService) {
-        console.log("statusCode: ", responseFromService.statusCode);
+        //console.log("statusCode: ", responseFromService.statusCode);
         //console.log("headers: ", responseFromService.headers);
 
         responseFromService.on('data', function (d) {
@@ -81,10 +76,10 @@ function simplifiedHttpsGet(thisPath, onEndFunction, onErrFunction, onNon200Code
     });
 };
 
-function simplifiedHttpsPost(thisPath, onEndFunction, onErrFunction, onNon200Code, thisPostData) {
+function httpsPost(thisPath, onEndFunction, onErrFunction, onNon200Code, thisPostData) {
 
-    console.log('\nOutgoing URL');
-    console.log('https://' + BASE_URL + thisPath);
+    //console.log('\nOutgoing URL');
+    //console.log('https://' + BASE_URL + thisPath);
 
     //console.log(thisPostData);
 
@@ -103,7 +98,7 @@ function simplifiedHttpsPost(thisPath, onEndFunction, onErrFunction, onNon200Cod
     var responseBody = '';
 
     var requestToService = https.request(options, function (responseFromService) {
-        console.log("statusCode: ", responseFromService.statusCode);
+        //console.log("statusCode: ", responseFromService.statusCode);
         if (responseFromService.statusCode != 200) {
             onNon200Code(responseFromService.statusMessage);
         }
@@ -115,168 +110,13 @@ function simplifiedHttpsPost(thisPath, onEndFunction, onErrFunction, onNon200Cod
         });
 
         responseFromService.on('end', function () {
-            console.log('Response Data:');
+            //console.log('Response Data:');
             if (responseBody === ''){
-                console.log('NO DATA');
+                //console.log('NO DATA');
             } else {
-                console.log(responseBody);
+                //console.log(responseBody);
             }
             onEndFunction(responseBody, responseFromService);
-        });
-    });
-    requestToService.write(thisPostData);
-    requestToService.on('error', function (err) {
-        onErrFunction(err);
-    });
-    requestToService.end();
-};
-
-function simplifiedHttpsDelete(thisPath, onEndFunction, onErrFunction) {
-    console.log('\nOutgoing URL');
-    console.log('https://' + BASE_URL + thisPath);
-
-    var options = {
-        rejectUnauthorized: false,
-        hostname: BASE_URL,
-        port: 443,
-        path: thisPath,
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    };
-
-    var responseBody = '';
-
-    var requestToService = https.request(options, function (responseFromService) {
-        console.log("statusCode: ", responseFromService.statusCode);
-
-        responseFromService.on('data', function (d) {
-            if (d !== null)
-                responseBody += d;
-        });
-
-        responseFromService.on('end', function () {
-            console.log('Response Data:');
-            console.log(responseBody);
-            onEndFunction(responseBody, responseFromService);
-        });
-    });
-    requestToService.on('error', function (err) {
-        console.log('error:');
-        console.log(err);
-        onErrFunction(err);
-    });
-    requestToService.end();
-};
-
-function simplifiedHttpsGetWithBaseUrl(baseUrl, thisPath, onEndFunction, onErrFunction) {
-
-    console.log('\nOutgoing URL');
-    console.log('https://' + baseUrl + thisPath);
-
-    var options = {
-        rejectUnauthorized: false,
-        hostname: baseUrl,
-        port: 443,
-        path: thisPath,
-        method: 'GET'
-    };
-
-    var responseBody = '';
-
-    var requestToService = https.request(options, function (responseFromService) {
-        console.log("statusCode: ", responseFromService.statusCode);
-        //console.log("headers: ", responseFromService.headers);
-
-        responseFromService.on('data', function (d) {
-            if (d !== null)
-                responseBody += d;
-        });
-        responseFromService.on('end', function () {
-            console.log('Response Data:');
-            console.log(responseBody);
-            onEndFunction(responseBody, responseFromService);
-        });
-    });
-    requestToService.end();
-
-    requestToService.on('error', function (e) {
-        onErrFunction(e);
-    });
-};
-
-function simplifiedHttpsPostWithBaseUrl(baseUrl, thisPath, onEndFunction, onErrFunction, thisPostData) {
-
-    console.log('\nOutgoing URL');
-    console.log('http://' + baseUrl + thisPath);
-
-    //console.log(thisPostData);
-
-    var options = {
-        hostname: baseUrl,
-        path: thisPath,
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': thisPostData.length
-        }
-    };
-
-    var responseBody = '';
-
-    var requestToService = https.request(options, function (responseFromService) {
-        console.log("statusCode: ", responseFromService.statusCode);
-        //console.log("headers: ", responseFromService.headers);
-
-        responseFromService.on('data', function (data) {
-            responseBody += data;
-
-            responseFromService.on('end', function () {
-                console.log('Response Data:');
-                console.log(responseBody);
-                onEndFunction(responseBody, responseFromService);
-            });
-        });
-    });
-    requestToService.write(thisPostData);
-    requestToService.on('error', function (err) {
-        onErrFunction(err);
-    });
-    requestToService.end();
-};
-
-function simplifiedHttpsPutWithBaseUrl(baseUrl, thisPath, onEndFunction, onErrFunction, thisPostData) {
-
-    console.log('\nOutgoing URL');
-    console.log('http://' + baseUrl + thisPath);
-
-    //console.log(thisPostData);
-
-    var options = {
-        hostname: baseUrl,
-        path: thisPath,
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': thisPostData.length
-        }
-    };
-
-    var responseBody = '';
-
-    var requestToService = https.request(options, function (responseFromService) {
-        console.log("statusCode: ", responseFromService.statusCode);
-        //console.log("headers: ", responseFromService.headers);
-
-        responseFromService.on('data', function (data) {
-            responseBody += data;
-
-            responseFromService.on('end', function () {
-                console.log('Response Data:');
-                console.log(responseBody);
-                onEndFunction(responseBody, responseFromService);
-            });
         });
     });
     requestToService.write(thisPostData);

@@ -15,6 +15,7 @@ function Ballot(ballotData) {
     this.choices = [];
     this.winner = null;
     this.suggestion = null;
+    this.votes = [];
     this.getContestedBallot = function () {
         result = _.pick(this, 'suggestion', 'choices');
         result.choices = utils.shuffle(result.choices);
@@ -33,6 +34,9 @@ function Ballot(ballotData) {
             this.expired = true;
         }
         return this.expired;
+    };
+    this.castVote = function (newVote) {
+        this.votes.push(newVote)
     };
 }
 
