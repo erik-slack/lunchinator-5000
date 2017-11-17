@@ -29,10 +29,50 @@ Summary: write an API that allows clients to vote on where they're going to go e
 
 ## Endpoints
 
-* /api/create-ballot
-* /api/ballot/:ballotId
-* /api/ballots
-* /api/vote
+### /api/create-ballot
+
+POST
+http://localhost:3131/api/create-ballot/
+
+``` json
+{
+    "endTime": "3/20/18 11:45",
+    "voters": [
+        {
+           "name":"Bob",
+           "emailAddress": "bob@gmail.com"
+        }, {
+           "name":"Jim",
+           "emailAddress": "jim@gmail.com"
+        }
+    ]
+
+}
+```
+
+### /api/ballot/:ballotId
+
+GET
+http://localhost:3131/api/ballot/bfe8e9f7-2626-4851-8fde-581e5bdcd755
+
+### /api/ballots
+
+GET
+http://localhost:3131/api/ballots
+
+### /api/vote
+
+POST
+http://localhost:3131/api/ballot/bfe8e9f7-2626-4851-8fde-581e5bdcd755
+
+``` json
+{
+    "restaurantId": 8,
+    "ballotId": "9acba948-49e3-41e3-8a5e-3ab1a18e0a19",
+    "voterName": "Bob",
+    "emailAddress": "bob@gmail.com"
+}
+```
 
 ## Original Author of Solution
 
