@@ -14,7 +14,7 @@ This is a simple coding challenge given to me as part of an interview regarding 
 1. Open a terminal application--such as powershell in a Windows OS.
 1. In the local repository's root directory run git pull to get latest. (in case there have been some changes since last you cloned this repo)
 1. Run npm install in the local repository's root directory.
-1. Run nodemon server.js to start the application in development mode. Run nodemon server.js --production to run the application in production mode.
+1. Run node server.js to start the application in development mode. Run node server.js --production to run the application in production mode.
 
 ## Components
 
