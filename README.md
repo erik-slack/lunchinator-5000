@@ -1,5 +1,13 @@
 # Lunchinator 5000
 
+## Description
+
+This is a simple coding challenge given to me as part of an interview regarding Node.js.
+
+## Challenge Specs
+
+* [https://interview-project-17987.herokuapp.com/backend-software-engineer-test](https://interview-project-17987.herokuapp.com/backend-software-engineer-test)
+
 ## Getting Started
 
 1. Clone this repo.
@@ -16,3 +24,7 @@
 ## Dependencies
 
 * npm - the `package.json` file lists all of the npm dependencies
+
+## Original Author of Solution
+
+[Erik Slack](https://github.com/erik-slack/)

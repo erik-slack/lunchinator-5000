@@ -59,10 +59,6 @@ module.exports = function () {
             }
             return result;
         }
-
-        function tallyVotes() {
-            
-        }
     });
 
     return router;

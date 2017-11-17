@@ -64,6 +64,7 @@ function createBallot(req, res) {
     }
 
     function addSuggestion(relevantReviews) {
+        // todo: debug this -- it doesn't always choose the highest rated restaurant for the suggestion
         var highestRatedChoiceIndex = 0;
         var highestRatingReviewIndex = -1;
         var reviewsCount = relevantReviews.length;

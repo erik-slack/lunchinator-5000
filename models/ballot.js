@@ -60,31 +60,39 @@ function Ballot(ballotData) {
     this.voteMatchesChoices = function (vote) {
         // This must be a number not a string
         var result = false;
-        console.log('NUM_OF_CHOICES', NUM_OF_CHOICES);
         for (var i = 0; i < NUM_OF_CHOICES; i++) {
             var thisChoice = this.choices[i];
-            console.log('thisChoice.id', thisChoice.id);
-            console.log('vote.restaurantId', vote.restaurantId);
             if (vote.restaurantId === thisChoice.id) {
                 result = true;
+                break;
             }
         }
         return result;
     };
-    this.castVote = function (newVote) {
-        var voteCounted = true;
-        if (this.validateVote(newVote)) {
-            voteCounted = false;
+    this.findVote = function (newVote) {
+        var foundIndex = -1;
+        var voteCount = this.votes.length;
+        for (var i = 0; i < voteCount; i++) {
+            var thisVote = this.votes[i];
+            if (thisVote.voterName === newVote.voterName) {
+                foundIndex = i;
+                break;
+            }
         }
-        if (voteCounted) {
+        return foundIndex;
+    };
+    this.castVote = function (newVote) {
+        var voteHandledMessage = 'Your vote has been counted.';
+        var voterAlreadyVotedIndex = this.findVote(newVote); // -1 if no dupe vote found
+        if (voterAlreadyVotedIndex !== -1) {
+            this.votes.splice(newVote);
+            voteHandledMessage = 'Previous vote overwritten by new vote.';
+        } else (voteCounted) {
             this.votes.push(newVote);
         }
-        return voteCounted;
+        return voteHandledMessage;
     };
     this.tallyVotes = function () {
 
     };
 }
-
-
-
